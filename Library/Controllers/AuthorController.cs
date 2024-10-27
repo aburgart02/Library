@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Library.Dto;
 using Library.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,8 +16,14 @@ public class AuthorController : Controller
 
     [HttpPost]
     [Route("authors")]
-    public IActionResult AddAuthor([FromBody] Author author)
+    public IActionResult AddAuthor([FromBody] AuthorDto authorDto)
     {
+        var author = new Author()
+        {
+            Name = authorDto.Name, 
+            Surname = authorDto.Surname, 
+            Patronymic = authorDto.Patronymic
+        };
         try
         {
             _db.Authors.Add(author);

@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Library.Dto;
 using Library.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -16,8 +17,15 @@ public class BookController : Controller
 
     [HttpPost]
     [Route("books")]
-    public IActionResult AddBook([FromBody] Book book)
+    public IActionResult AddBook([FromBody] BookDto bookDto)
     {
+        var book = new Book()
+        {
+            Title = bookDto.Title, 
+            Description = bookDto.Description, 
+            Text = bookDto.Text, 
+            AuthorId = bookDto.AuthorId
+        };
         try
         {
             _db.Books.Add(book);
@@ -50,17 +58,17 @@ public class BookController : Controller
     
     [HttpPut]
     [Route("books/{id}")]
-    public IActionResult UpdateBook(int id, [FromBody] Book bookData)
+    public IActionResult UpdateBook(int id, [FromBody] BookDto bookDto)
     {
         var book = _db.Books.FirstOrDefault(x => x.Id == id);
         if (book is null)
             return NotFound();
         try
         {
-            book.Title = bookData.Title;
-            book.Description = bookData.Description;
-            book.Text = bookData.Text;
-            book.AuthorId = bookData.AuthorId;
+            book.Title = bookDto.Title;
+            book.Description = bookDto.Description;
+            book.Text = bookDto.Text;
+            book.AuthorId = bookDto.AuthorId;
             _db.SaveChanges();
         }
         catch (DbUpdateException e)
