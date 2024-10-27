@@ -1,0 +1,138 @@
+openapi: 3.0.0
+info:
+  title: Library API
+  description: REST API for library
+  version: 1.0.0
+servers:
+  - url: https://localhost:7021
+
+paths:
+  /books:
+    post:
+      summary: Create a new book
+      operationId: createBook
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                text:
+                  type: string
+                authorId:
+                  type: integer
+              required:
+                - title
+                - text
+                - authorId
+      responses:
+        '200':
+          description: Book created successfully
+        '400':
+          description: Invalid input
+
+    get:
+      summary: Get all books
+      operationId: getAllBooks
+      responses:
+        '200':
+          description: A list of books
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    title:
+                      type: string
+                    description:
+                      type: string
+                    text:
+                      type: string
+                    authorId:
+                      type: integer
+
+  /books/{id}:
+    get:
+      summary: Get a book by ID
+      operationId: getBookById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the book to retrieve
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A book object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  title:
+                    type: string
+                  description:
+                    type: string
+                  text:
+                    type: string
+                  authorId:
+                    type: integer
+        '404':
+          description: Book not found
+
+    put:
+      summary: Update a book by ID
+      operationId: updateBookById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the book to update
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                text:
+                  type: string
+                authorId:
+                  type: integer
+      responses:
+        '200':
+          description: Book updated successfully
+        '400':
+          description: Invalid input
+        '404':
+          description: Book not found
+
+    delete:
+      summary: Delete a book by ID
+      operationId: deleteBookById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the book to delete
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Book deleted successfully
+        '404':
+          description: Book not found
