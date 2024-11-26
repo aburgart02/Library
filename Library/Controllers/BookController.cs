@@ -33,9 +33,9 @@ public class BookController : Controller
         }
         catch (DbUpdateException e)
         {
-            return BadRequest();
+            return BadRequest("Invalid input");
         }
-        return Ok();
+        return Ok("Book created successfully");
     }
     
     [HttpGet]
@@ -52,7 +52,7 @@ public class BookController : Controller
     {
         var book = _db.Books.FirstOrDefault(x => x.Id == id);
         if (book is null)
-            return NotFound();
+            return NotFound("Book not found");
         return Ok(JsonSerializer.Serialize(book));
     }
     
@@ -62,7 +62,7 @@ public class BookController : Controller
     {
         var book = _db.Books.FirstOrDefault(x => x.Id == id);
         if (book is null)
-            return NotFound();
+            return NotFound("Book not found");
         try
         {
             book.Title = bookDto.Title;
@@ -73,9 +73,9 @@ public class BookController : Controller
         }
         catch (DbUpdateException e)
         {
-            return BadRequest();
+            return BadRequest("Invalid input");
         }
-        return Ok();
+        return Ok("Book updated successfully");
     }
     
     [HttpDelete]
@@ -84,9 +84,9 @@ public class BookController : Controller
     {
         var book = _db.Books.FirstOrDefault(x => x.Id == id);
         if (book is null) 
-            return NotFound();
+            return NotFound("Book not found");
         _db.Books.Remove(book);
         _db.SaveChanges();
-        return Ok();
+        return Ok("Book deleted successfully");
     }
 }
